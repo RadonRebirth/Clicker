@@ -3,6 +3,7 @@ package com.example.testactivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +18,6 @@ import android.widget.VideoView;
 public class MainActivity extends AppCompatActivity {
     private Integer counter = 0; /// создание приватной переменной counter
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -46,18 +46,26 @@ public class MainActivity extends AppCompatActivity {
                     openActivity2(); /// вызов метода перехода в другой активити
                 }
             }
-
         });
+
             ///Добавление видео и элементов управления
         VideoView videoView = findViewById(R.id.video_view);
-
         String videoPath ="android.resource://" + getPackageName() + "/" + R.raw.video; /// добавления пути расположения нашего видео
         Uri uri = Uri.parse(videoPath); /// создание uri метода
         videoView.setVideoURI(uri); /// использование uri метода для работы видео
+        videoView.start(); /// автозапуск видео
+        videoView.setOnCompletionListener ( new MediaPlayer.OnCompletionListener() {
+
+            @Override /// создание метода при завершении видео (onComplectetion)
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                videoView.start(); /// автозапуск видео
+            }
+        });
 
         MediaController mediaController = new MediaController(this); /// создание метода элементов управления видео
         videoView.setMediaController(mediaController); /// установка метода для объекта videoView
         mediaController.setAnchorView(videoView);
+
     }
     /// Создание метода перехода в другой  активити
     public void openActivity2() {
