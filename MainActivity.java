@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -16,7 +17,8 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity {
-    private Integer counter = 0; /// создание приватной переменной counter
+    final String LOG_TAG = "myLogs";
+    Integer counter = 0; /// создание приватной переменной counter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
             ///Добавление видео и элементов управления
         VideoView videoView = findViewById(R.id.video_view);
         String videoPath ="android.resource://" + getPackageName() + "/" + R.raw.video; /// добавления пути расположения нашего видео
@@ -61,15 +62,23 @@ public class MainActivity extends AppCompatActivity {
                 videoView.start(); /// автозапуск видео
             }
         });
-
         MediaController mediaController = new MediaController(this); /// создание метода элементов управления видео
         videoView.setMediaController(mediaController); /// установка метода для объекта videoView
         mediaController.setAnchorView(videoView);
-
     }
     /// Создание метода перехода в другой  активити
     public void openActivity2() {
         Intent intent = new Intent(this, Activity2.class); /// создание Intent метода и указание конректного активити, которое мы хотим открыть
         startActivity(intent);
+    }
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        counter = savedInstanceState.getInt("Count");
+        Log.d(LOG_TAG, "onRestoreInstanceState");
+    }
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("Count", counter);
+        Log.d(LOG_TAG, "onSaveInstateState");
     }
 }
